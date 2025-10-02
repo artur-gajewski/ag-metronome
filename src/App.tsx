@@ -45,6 +45,12 @@ function App() {
   useEffect(() => {
     if (isPlaying) {
       const interval = (60 / bpm) * 1000;
+
+      // Play first beat immediately
+      setCurrentBeat(0);
+      playClick(true);
+
+      // Then continue with interval
       intervalRef.current = window.setInterval(() => {
         setCurrentBeat((prev) => {
           const next = (prev + 1) % 4;
@@ -64,7 +70,7 @@ function App() {
     };
   }, [isPlaying, bpm, isMuted]);
 
-  // Spacebar listener for Play/Pause
+  // Key press listeners
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
