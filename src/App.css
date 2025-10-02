@@ -1,0 +1,104 @@
+/* Container fills screen and centers content */
+.container {
+  font-family: sans-serif;
+  background-color: white;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Inner content wrapper */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  padding: 1rem;
+}
+
+/* Title */
+.title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+/* Slider container */
+.sliderBox {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Slider label */
+.label {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Slider input */
+.slider {
+  width: 90%;
+  max-width: 400px;
+}
+
+/* Beats row */
+.beats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 2.5rem;
+  margin: 1.5rem 0 3rem 0;
+  flex-wrap: wrap;
+}
+
+/* Individual beat number */
+.beat {
+  font-weight: bold;
+  min-width: 2rem;
+  text-align: center;
+  color: lightgray; /* default color */
+}
+
+/* Active beat (beats 2–4) */
+.beat.active {
+  color: black;
+}
+
+/* First beat */
+.beat.first-beat {
+  color: green;
+}
+
+/* Buttons container */
+.buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Button style */
+.button {
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  background: #eee;
+  color: #333;
+}
+
+/* Hint text below buttons */
+.hint {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 2rem;
+}

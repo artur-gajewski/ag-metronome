@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:svg="http://www.w3.org/2000/svg" id="svg7565" viewBox="0 0 259.75 342.45" version="1.1">
+  <g id="layer1" transform="translate(-80.767 -43.472)">
+    <g id="g8105" stroke-width="8">
+      <path id="path7579" stroke-linejoin="bevel" stroke="#001062" fill="#3580ff" d="m158.68 131.04c8.1037 14.678 54.977 137.56 62.553 190.27 9.506 66.146-104.54 88.871-120.4 13.122-0.73187-32.771 20.229-48.129 50.324-48.813 18.093-0.41121 41.795 11.305 47.183 17.24-22.56-81.2-52.81-186.79-106.69-245-52.481-31.926 212.04 28.042 220.24-4.105 8.21-32.147 10.26 67.715 24.63 103.96-35.17 16.9-134.88-5.33-177.84-26.68z"/>
+      <path id="path8093" stroke-linejoin="round" d="m128.83 366.12c-33.747-26.455-26.116-73.994 26.285-73.655" stroke="#bbc6ff" stroke-linecap="round" fill="#3580ff"/>
+      <path id="path8103" stroke-linejoin="round" d="m204.57 302.47c-43.57-156.74-59-188.33-105.7-247.47 58.26-2.534 85.1 18.513 208.3 14.3" stroke="#bbc6ff" stroke-linecap="round" fill="none"/>
+    </g>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Musical note</dc:title>
+        <dc:date>2009-11-27T23:33:28</dc:date>
+        <dc:description>A musical note.</dc:description>
+        <dc:source>http://openclipart.org/detail/28505/musical-note-by-mbtwms</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>mbtwms</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>cartoon</rdf:li>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>colour</rdf:li>
+            <rdf:li>image</rdf:li>
+            <rdf:li>media</rdf:li>
+            <rdf:li>music</rdf:li>
+            <rdf:li>musical note</rdf:li>
+            <rdf:li>note</rdf:li>
+            <rdf:li>outline</rdf:li>
+            <rdf:li>public domain</rdf:li>
+            <rdf:li>score</rdf:li>
+            <rdf:li>sound</rdf:li>
+            <rdf:li>svg</rdf:li>
+            <rdf:li>symbol</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
