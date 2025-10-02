@@ -1,24 +1,40 @@
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
 /* Container fills screen and centers content */
 .container {
   font-family: sans-serif;
   background-color: white;
-  height: 100vh;
-  width: 100vw;
+
+  /* Flex container, horizontally centered, vertically starts at top */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; /* horizontal centering */
+  align-items: flex-start; /* start at top */
+
+  min-height: 100vh; /* fallback */
+  min-height: 100dvh; /* modern browsers */
+  min-height: -webkit-fill-available; /* iOS Safari */
 }
 
 /* Inner content wrapper */
 .content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* horizontal centering inside content */
+  justify-content: flex-start; /* start at top of content */
   text-align: center;
   max-width: 500px;
   width: 100%;
   padding: 1rem;
+
+  /* Optional: small gap from top */
+  margin-top: 2rem; /* adjust as needed */
 }
 
 /* Title */
