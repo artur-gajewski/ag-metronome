@@ -6,13 +6,21 @@ function App() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [currentBeat, setCurrentBeat] = useState<number>(0);
+  const [flash, setFlash] = useState(false);
+  const [visualAid, setVisualAid] = useState(false);
+
   const intervalRef = useRef<number | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const isMutedRef = useRef(isMuted);
+  const visualAidRef = useRef(visualAid);
 
   useEffect(() => {
     isMutedRef.current = isMuted;
   }, [isMuted]);
+
+  useEffect(() => {
+    visualAidRef.current = visualAid;
+  }, [visualAid]);
 
   const playClick = (isFirstBeat: boolean) => {
     if (isMutedRef.current) return;
@@ -45,10 +53,20 @@ function App() {
 
       setCurrentBeat(0);
       playClick(true);
+      if (visualAidRef.current) {
+        setFlash(true);
+        setTimeout(() => setFlash(false), 100);
+      }
 
       intervalRef.current = window.setInterval(() => {
         setCurrentBeat((prev) => {
           const next = (prev + 1) % 4;
+
+          if (next === 0 && visualAidRef.current) {
+            setFlash(true);
+            setTimeout(() => setFlash(false), 100);
+          }
+
           playClick(next === 0);
           return next;
         });
@@ -74,6 +92,9 @@ function App() {
       if (e.code === "KeyM") {
         setIsMuted((prev) => !prev);
       }
+      if (e.code === "KeyV") {
+        setVisualAid((prev) => !prev);
+      }
       if (e.code === "ArrowUp") {
         setBpm((prev) => Math.min(prev + 1, 200));
         setIsPlaying(false);
@@ -88,10 +109,10 @@ function App() {
   }, []);
 
   return (
-    <div className={"container"}>
-      <div className={"content"}>
-        <div className={"sliderBox"}>
-          <h1 className={"title"}>BPM: {bpm}</h1>
+    <div className={`container ${flash ? "flash" : ""}`}>
+      <div className="content">
+        <div className="sliderBox">
+          <h1 className="title">BPM: {bpm}</h1>
           <input
             type="range"
             min={40}
@@ -101,11 +122,11 @@ function App() {
               setBpm(Number(e.target.value));
               setIsPlaying(false);
             }}
-            className={"slider"}
+            className="slider"
           />
         </div>
 
-        <div className={"beats"}>
+        <div className="beats">
           {[0, 1, 2, 3].map((beat) => {
             const isActive = currentBeat === beat;
             const isFirst = beat === 0;
@@ -127,25 +148,30 @@ function App() {
           })}
         </div>
 
-        <div className={"buttons"}>
+        <div className="buttons">
           {!isPlaying ? (
-            <button className={"button"} onClick={() => setIsPlaying(true)}>
+            <button className="button" onClick={() => setIsPlaying(true)}>
               ▶ Play
             </button>
           ) : (
-            <button className={"button"} onClick={() => setIsPlaying(false)}>
+            <button className="button" onClick={() => setIsPlaying(false)}>
               ⏸ Pause
             </button>
           )}
-          <button className={"button"} onClick={() => setIsMuted((m) => !m)}>
+          <button className="button" onClick={() => setIsMuted((m) => !m)}>
             {isMuted ? "🔇 Unmute" : "🔊 Mute"}
+          </button>
+          <button className="button" onClick={() => setVisualAid((v) => !v)}>
+            {visualAid ? "🔴 Disable Visual Aid" : "🟢 Enable Visual Aid"}
           </button>
         </div>
 
-        <div className={"hint"}>
+        <div className="hint">
           <b>Space</b> to Play/Pause
           <br />
           <b>M</b> to Mute/Unmute
+          <br />
+          <b>V</b> to toggle Visual Aid
           <br />
           <b>Arrow up</b> to Increase BPM
           <br />

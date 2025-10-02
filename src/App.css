@@ -11,15 +11,17 @@ body,
 .container {
   font-family: sans-serif;
   background-color: white;
-
-  /* Flex container, horizontally centered, vertically starts at top */
   display: flex;
-  justify-content: center; /* horizontal centering */
-  align-items: flex-start; /* start at top */
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  transition: background-color 0.1s ease;
+}
 
-  min-height: 100vh; /* fallback */
-  min-height: 100dvh; /* modern browsers */
-  min-height: -webkit-fill-available; /* iOS Safari */
+.container.flash {
+  background-color: #000000;
 }
 
 /* Inner content wrapper */
