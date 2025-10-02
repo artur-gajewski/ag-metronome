@@ -8,29 +8,27 @@ function App() {
   const [currentBeat, setCurrentBeat] = useState<number>(0);
   const intervalRef = useRef<number | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const isMutedRef = useRef(isMuted);
 
-  // Play a short beep (high pitch for first beat, low for others)
+  useEffect(() => {
+    isMutedRef.current = isMuted;
+  }, [isMuted]);
+
   const playClick = (isFirstBeat: boolean) => {
-    if (isMuted) return;
+    if (isMutedRef.current) return;
+
     if (!audioCtxRef.current) {
       audioCtxRef.current = new AudioContext();
     }
-
     const ctx = audioCtxRef.current;
-
-    // Resume audio context for iOS/Chrome mobile
-    if (ctx.state === "suspended") {
-      ctx.resume();
-    }
+    if (ctx.state === "suspended") ctx.resume();
 
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
-    // Frequencies: first beat is higher, others one octave lower
     osc.type = "sine";
     osc.frequency.value = isFirstBeat ? 880 : 440;
 
-    // Envelope: short beep (100ms)
     gain.gain.setValueAtTime(1, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
 
@@ -41,16 +39,13 @@ function App() {
     osc.stop(ctx.currentTime + 0.1);
   };
 
-  // Handle Play/Pause interval
   useEffect(() => {
     if (isPlaying) {
       const interval = (60 / bpm) * 1000;
 
-      // Play first beat immediately
       setCurrentBeat(0);
       playClick(true);
 
-      // Then continue with interval
       intervalRef.current = window.setInterval(() => {
         setCurrentBeat((prev) => {
           const next = (prev + 1) % 4;
@@ -68,13 +63,12 @@ function App() {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isPlaying, bpm, isMuted]);
+  }, [isPlaying, bpm]);
 
-  // Key press listeners
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
-        e.preventDefault(); // prevent scrolling
+        e.preventDefault();
         setIsPlaying((prev) => !prev);
       }
       if (e.code === "KeyM") {
@@ -82,9 +76,11 @@ function App() {
       }
       if (e.code === "ArrowUp") {
         setBpm((prev) => Math.min(prev + 1, 200));
+        setIsPlaying(false);
       }
       if (e.code === "ArrowDown") {
         setBpm((prev) => Math.max(prev - 1, 40));
+        setIsPlaying(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -101,7 +97,10 @@ function App() {
             min={40}
             max={200}
             value={bpm}
-            onChange={(e) => setBpm(Number(e.target.value))}
+            onChange={(e) => {
+              setBpm(Number(e.target.value));
+              setIsPlaying(false);
+            }}
             className={"slider"}
           />
         </div>
