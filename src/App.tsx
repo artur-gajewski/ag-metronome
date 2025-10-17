@@ -5,7 +5,7 @@ function App() {
   const [bpm, setBpm] = useState<number>(100);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
-  const [currentBeat, setCurrentBeat] = useState<number>(0);
+  const [currentBeat, setCurrentBeat] = useState<number>(-1);
   const [flash, setFlash] = useState(false);
   const [visualAid, setVisualAid] = useState(false);
 
@@ -13,6 +13,71 @@ function App() {
   const audioCtxRef = useRef<AudioContext | null>(null);
   const isMutedRef = useRef(isMuted);
   const visualAidRef = useRef(visualAid);
+
+    const tapTimesRef = useRef<number[]>([]);
+    const lastTapRef = useRef<number>(0);
+    const handleTap = () => {
+        const now = performance.now();
+        const MIN_INTERVAL = 200;   // 300 BPM -> 200 ms
+        const MAX_INTERVAL = 1500;  // 40 BPM  -> 1500 ms
+
+        const sinceLast = now - lastTapRef.current;
+
+        // Ignore accidental double tap / key auto-repeat
+        if (sinceLast > 0 && sinceLast < MIN_INTERVAL - 20) {
+            lastTapRef.current = now;
+            return;
+        }
+
+        // Reset if pause between taps exceeds 2s
+        if (sinceLast > 2000) {
+            tapTimesRef.current = [];
+        }
+        tapTimesRef.current.push(now);
+
+        // Keep last 10 taps initially; after reaching 10, allow up to 100
+        const limit = tapTimesRef.current.length < 10 ? 10 : 100;
+        if (tapTimesRef.current.length > limit) {
+            tapTimesRef.current = tapTimesRef.current.slice(-limit);
+        }
+
+        lastTapRef.current = now;
+
+        if (tapTimesRef.current.length >= 2) {
+            const times = tapTimesRef.current;
+            const intervals: number[] = [];
+            for (let i = 1; i < times.length; i++) {
+                const iv = times[i] - times[i - 1];
+                // Filter out-of-range intervals (outliers)
+                if (iv >= MIN_INTERVAL && iv <= MAX_INTERVAL) {
+                    intervals.push(iv);
+                }
+            }
+
+            if (intervals.length === 0) return;
+
+            let bpmCalc: number;
+            if (intervals.length === 1) {
+                bpmCalc = 60000 / intervals[0];
+            } else {
+                const bpms = intervals.map(iv => 60000 / iv);
+                if (bpms.length >= 6) {
+                    const sorted = [...bpms].sort((a, b) => a - b);
+                    sorted.shift();
+                    sorted.pop();
+                    bpmCalc = sorted.reduce((a, b) => a + b, 0) / sorted.length;
+                } else if (bpms.length >= 3) {
+                    bpmCalc = bpms.reduce((a, b) => a + b, 0) / bpms.length;
+                } else {
+                    bpmCalc = bpms[bpms.length - 1];
+                }
+            }
+
+            const clamped = Math.min(300, Math.max(40, Math.round(bpmCalc)));
+            // Light smoothing to avoid abrupt jumps
+            setBpm(prev => Math.round((prev * 0.4) + (clamped * 0.6)));
+        }
+    };
 
   useEffect(() => {
     isMutedRef.current = isMuted;
@@ -88,6 +153,7 @@ function App() {
       if (e.code === "Space") {
         e.preventDefault();
         setIsPlaying((prev) => !prev);
+          setCurrentBeat(-1);
       }
       if (e.code === "KeyM") {
         setIsMuted((prev) => !prev);
@@ -95,13 +161,18 @@ function App() {
       if (e.code === "KeyV") {
         setVisualAid((prev) => !prev);
       }
+      if (e.code === "Enter" || e.code === "KeyT") {
+          handleTap();
+          setCurrentBeat(-1);
+          setIsPlaying(false);
+      }
       if (e.code === "ArrowUp") {
-        setBpm((prev) => Math.min(prev + 1, 200));
-        setIsPlaying(false);
+        setBpm((prev) => Math.min(prev + 1, 300));
+        // setIsPlaying(false);
       }
       if (e.code === "ArrowDown") {
         setBpm((prev) => Math.max(prev - 1, 40));
-        setIsPlaying(false);
+        // setIsPlaying(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -116,7 +187,7 @@ function App() {
           <input
             type="range"
             min={40}
-            max={200}
+            max={300}
             value={bpm}
             onChange={(e) => {
               setBpm(Number(e.target.value));
@@ -154,8 +225,11 @@ function App() {
               ▶ Play
             </button>
           ) : (
-            <button className="button" onClick={() => setIsPlaying(false)}>
-              ⏸ Pause
+            <button className="button" onClick={() => {
+                setIsPlaying(false);
+                setCurrentBeat(-1);
+            }}>
+              ⏸ Stop
             </button>
           )}
           <button className="button" onClick={() => setIsMuted((m) => !m)}>
@@ -164,10 +238,15 @@ function App() {
           <button className="button" onClick={() => setVisualAid((v) => !v)}>
             {visualAid ? "🔴 Disable Visual Aid" : "🟢 Enable Visual Aid"}
           </button>
+          <button className="button-large" onClick={() => {
+              handleTap();
+              setCurrentBeat(-1);
+              setIsPlaying(false);
+          }}>🖱️ Tap Tempo</button>
         </div>
 
         <div className="hint">
-          <b>Space</b> to Play/Pause
+          <b>Space</b> to Play/Stop
           <br />
           <b>M</b> to Mute/Unmute
           <br />
@@ -176,6 +255,8 @@ function App() {
           <b>Arrow up</b> to Increase BPM
           <br />
           <b>Arrow down</b> to Decrease BPM
+          <br />
+          <b>T or ENTER</b> tap to set BPM
         </div>
       </div>
     </div>
