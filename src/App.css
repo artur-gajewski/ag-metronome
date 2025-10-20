@@ -1,210 +1,217 @@
 html,
 body,
 #root {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    background-color: #000;
-    color: #f5f5f5;
-    font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+  color: #f5f5f5;
+  font-family: sans-serif;
 }
 
 /* Container fills screen and centers content (dark default) */
 .container {
-    background-color: #000;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    min-height: 100dvh;
-    min-height: -webkit-fill-available;
-    transition: background-color 0.15s ease, color 0.15s ease;
-    color: inherit;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  color: inherit;
 }
 
 /* Light flash state */
 .container.flash {
-    background-color: #ffffff;
-    color: #111;
+  background-color: #ffffff;
+  color: #111;
 }
 
 /* Inner content wrapper */
 .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    text-align: center;
-    max-width: 500px;
-    width: 100%;
-    padding: 1rem;
-    margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  padding: 1rem;
+  margin-top: 2rem;
 }
 
 /* Title */
 .title {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
 }
 
 /* Slider container */
 .sliderBox {
-    margin-bottom: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 /* Slider label */
 .label {
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
 }
 
 /* Slider input */
 .slider {
-    width: 90%;
-    max-width: 400px;
+  width: 90%;
+  max-width: 400px;
 }
 
 /* Beats row */
 .beats {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    font-size: 2.5rem;
-    margin: 1.5rem 0 3rem 0;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 2.5rem;
+  margin: 1.5rem 0 3rem 0;
+  flex-wrap: wrap;
 }
 
 /* Individual beat number */
 .beat {
-    font-weight: bold;
-    min-width: 2rem;
-    text-align: center;
-    color: #777;
-    transition: color 0.15s ease;
+  font-weight: bold;
+  min-width: 2rem;
+  text-align: center;
+  color: #777;
+  transition: color 0.15s ease;
 }
 
 /* Active beat (beats 2–4) */
 .beat.active {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 /* First beat */
 .beat.first-beat {
-    color: #ff0000;
+  color: #ff0000;
 }
 
 /* Light theme overrides for beats */
 .container.flash .beat {
-    color: #888;
+  color: #888;
 }
 
 .container.flash .beat.active {
-    color: #000;
+  color: #000;
 }
 
 .container.flash .beat.first-beat {
-    color: #2e7d32;
+  color: #2e7d32;
 }
 
 /* Buttons container */
 .buttons {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 /* Button style (dark) */
 .button {
-    font-size: 1rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    border: 1px solid #444;
-    cursor: pointer;
-    background: #333;
-    color: #f5f5f5;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #444;
+  cursor: pointer;
+  background: #333;
+  color: #f5f5f5;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .button-large {
-    font-size: 1rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    border: 1px solid #444;
-    cursor: pointer;
-    background: #333;
-    color: #f5f5f5;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-    width: 300px;
-    height: 200px;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #444;
+  cursor: pointer;
+  background: #333;
+  color: #f5f5f5;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+  width: 300px;
+  height: 200px;
 }
 
 .button:hover {
-    background: #444;
+  background: #444;
 }
 
 .button:active {
-    background: #555;
+  background: #555;
 }
 
 .button:focus-visible {
-    outline: 2px solid #888;
-    outline-offset: 2px;
+  outline: 2px solid #888;
+  outline-offset: 2px;
 }
 
 /* Light theme button overrides */
 .container.flash .button {
-    background: #eee;
-    color: #222;
-    border: 1px solid #ccc;
+  background: #eee;
+  color: #222;
+  border: 1px solid #ccc;
 }
 
 .container.flash .button:hover {
-    background: #ddd;
+  background: #ddd;
 }
 
 .container.flash .button:active {
-    background: #ccc;
+  background: #ccc;
 }
 
 .container.flash .button:focus-visible {
-    outline: 2px solid #555;
-    outline-offset: 2px;
+  outline: 2px solid #555;
+  outline-offset: 2px;
 }
 
 /* Hint text */
 .hint {
-    font-size: 0.9rem;
-    color: #aaa;
-    margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-top: 2rem;
 }
 
 .container.flash .hint {
-    color: #666;
+  color: #666;
 }
 
-
 @media (max-width: 600px) {
-    .content {
-        margin-top: 0;
-    }
+  .content {
+    margin-top: 0;
+  }
 
-    .beats {
-        margin-top: 0;
-    }
+  .beats {
+    margin-top: 0;
+  }
 
-    .button-large {
-        height: 150px;
-        margin-top: 2em;
-    }
+  .button-large {
+    height: 150px;
+    margin-top: 2em;
+  }
 
-    .hint {
-        display: none;
-    }
+  .hint {
+    display: none;
+  }
 }
