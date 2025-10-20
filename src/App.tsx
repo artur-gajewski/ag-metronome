@@ -17,7 +17,7 @@ function App() {
   const isMutedRef = useRef(isMuted);
   const visualAidRef = useRef(visualAid);
 
-  const beats = [{ top: 2 }, { top: 3 }, { top: 4 }];
+  const beats = [{ top: 2 }, { top: 3 }, { top: 4 }, { top: 6 }, { top: 8 }];
 
   const toggleBeats = () => {
     setMeasure((prev) => {
