@@ -188,3 +188,23 @@ body,
 .container.flash .hint {
     color: #666;
 }
+
+
+@media (max-width: 600px) {
+    .content {
+        margin-top: 0;
+    }
+
+    .beats {
+        margin-top: 0;
+    }
+
+    .button-large {
+        height: 150px;
+        margin-top: 2em;
+    }
+
+    .hint {
+        display: none;
+    }
+}

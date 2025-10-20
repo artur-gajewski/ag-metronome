@@ -74,8 +74,7 @@ function App() {
             }
 
             const clamped = Math.min(300, Math.max(40, Math.round(bpmCalc)));
-            // Light smoothing to avoid abrupt jumps
-            setBpm(prev => Math.round((prev * 0.4) + (clamped * 0.6)));
+            setBpm(prev => Math.round(prev * 0.3 + clamped * 0.7));
         }
     };
 
