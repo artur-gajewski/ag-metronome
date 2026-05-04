@@ -16,7 +16,7 @@ describe("KeyboardHints", () => {
     expect(screen.getByText(/toggle Visual Aid/i)).toBeInTheDocument();
     expect(screen.getByText("B")).toBeInTheDocument();
     expect(screen.getByText(/change beats/i)).toBeInTheDocument();
-    expect(screen.getByText("Enter")).toBeInTheDocument();
+    expect(screen.getByText("Enter / T")).toBeInTheDocument();
     expect(screen.getByText(/tap tempo/i)).toBeInTheDocument();
   });
 

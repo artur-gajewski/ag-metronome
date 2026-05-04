@@ -21,6 +21,10 @@ export const useKeyboardControls = ({
 }: UseKeyboardControlsProps) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore events originating from input elements (e.g. the BPM range/number inputs)
+      // so that native input behaviour (arrow keys moving the slider) is not doubled up.
+      if (e.target instanceof HTMLInputElement) return;
+
       if (e.code === "Space") {
         e.preventDefault();
         onPlayToggle();

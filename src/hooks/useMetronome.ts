@@ -21,52 +21,63 @@ export const useMetronome = ({
   onFlash,
   playClick,
 }: UseMetronomeProps) => {
-  const intervalRef = useRef<number | null>(null);
-  const isMutedRef = useRef(isMuted);
-  const visualAidRef = useRef(visualAid);
+  const timerRef = useRef<number | null>(null);
   const currentBeatRef = useRef<number>(0);
 
-  useEffect(() => {
-    isMutedRef.current = isMuted;
-  }, [isMuted]);
+  // Keep latest callback/state values in refs so the timer closure never goes stale
+  const isMutedRef = useRef(isMuted);
+  const visualAidRef = useRef(visualAid);
+  const onBeatChangeRef = useRef(onBeatChange);
+  const onFlashRef = useRef(onFlash);
+  const playClickRef = useRef(playClick);
+
+  useEffect(() => { isMutedRef.current = isMuted; }, [isMuted]);
+  useEffect(() => { visualAidRef.current = visualAid; }, [visualAid]);
+  useEffect(() => { onBeatChangeRef.current = onBeatChange; }, [onBeatChange]);
+  useEffect(() => { onFlashRef.current = onFlash; }, [onFlash]);
+  useEffect(() => { playClickRef.current = playClick; }, [playClick]);
 
   useEffect(() => {
-    visualAidRef.current = visualAid;
-  }, [visualAid]);
-
-  useEffect(() => {
-    if (isPlaying) {
-      const interval = (60 / bpm) * 1000;
-
-      currentBeatRef.current = 0;
-      onBeatChange(0);
-      playClick(true, isMutedRef.current);
-
-      if (visualAidRef.current) {
-        onFlash();
+    if (!isPlaying) {
+      if (timerRef.current !== null) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
       }
-
-      intervalRef.current = window.setInterval(() => {
-        currentBeatRef.current = (currentBeatRef.current + 1) % measureTop;
-        const next = currentBeatRef.current;
-
-        if (next === 0 && visualAidRef.current) {
-          onFlash();
-        }
-
-        playClick(next === 0, isMutedRef.current);
-        onBeatChange(next);
-      }, interval);
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
+      return;
     }
 
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+    const interval = (60 / bpm) * 1000;
+    // expected tracks when the next tick should ideally fire, allowing drift correction
+    let expected = performance.now() + interval;
+    currentBeatRef.current = 0;
+
+    // Fire the first beat immediately
+    onBeatChangeRef.current(0);
+    playClickRef.current(true, isMutedRef.current);
+    if (visualAidRef.current) onFlashRef.current();
+
+    const tick = () => {
+      const beat = currentBeatRef.current;
+      onBeatChangeRef.current(beat);
+      playClickRef.current(beat === 0, isMutedRef.current);
+      if (beat === 0 && visualAidRef.current) onFlashRef.current();
+
+      currentBeatRef.current = (currentBeatRef.current + 1) % measureTop;
+
+      // Correct for drift: schedule the next tick earlier if we ran late
+      const drift = performance.now() - expected;
+      expected += interval;
+      timerRef.current = window.setTimeout(tick, Math.max(0, interval - drift));
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    currentBeatRef.current = 1;
+    timerRef.current = window.setTimeout(tick, interval);
+
+    return () => {
+      if (timerRef.current !== null) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
   }, [isPlaying, bpm, measureTop]);
 };

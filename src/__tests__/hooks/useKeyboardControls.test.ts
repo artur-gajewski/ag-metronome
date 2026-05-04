@@ -103,6 +103,25 @@ describe("useKeyboardControls", () => {
     expect(removeEventListenerSpy).toHaveBeenCalledWith("keydown", expect.any(Function));
   });
 
+  it("does not call callbacks when event comes from an input element", () => {
+    renderHook(() => useKeyboardControls(mockCallbacks));
+
+    const input = document.createElement("input");
+    document.body.appendChild(input);
+
+    // Dispatch events from the input – they bubble up to window but target is HTMLInputElement
+    ["ArrowUp", "ArrowDown", "Space", "KeyM"].forEach((code) => {
+      input.dispatchEvent(new KeyboardEvent("keydown", { code, bubbles: true }));
+    });
+
+    expect(mockCallbacks.onBpmIncrease).not.toHaveBeenCalled();
+    expect(mockCallbacks.onBpmDecrease).not.toHaveBeenCalled();
+    expect(mockCallbacks.onPlayToggle).not.toHaveBeenCalled();
+    expect(mockCallbacks.onMuteToggle).not.toHaveBeenCalled();
+
+    document.body.removeChild(input);
+  });
+
   it("does not call callbacks for unhandled keys", () => {
     renderHook(() => useKeyboardControls(mockCallbacks));
 

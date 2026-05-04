@@ -196,13 +196,13 @@ describe("useMetronome", () => {
     expect(mockOnBeatChange).not.toHaveBeenCalled();
   });
 
-  it("cleans up interval on unmount", () => {
-    const clearIntervalSpy = vi.spyOn(globalThis, "clearInterval");
+  it("cleans up timer on unmount", () => {
+    const clearTimeoutSpy = vi.spyOn(globalThis, "clearTimeout");
 
     const { unmount } = renderHook(() => useMetronome({ ...defaultProps, isPlaying: true }));
 
     unmount();
 
-    expect(clearIntervalSpy).toHaveBeenCalled();
+    expect(clearTimeoutSpy).toHaveBeenCalled();
   });
 });

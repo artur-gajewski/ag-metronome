@@ -1,8 +1,8 @@
-export interface Measure {
+export interface TimeSignature {
   top: number;
 }
 
-export const AVAILABLE_BEATS: Measure[] = [
+export const AVAILABLE_BEATS: TimeSignature[] = [
   { top: 2 },
   { top: 3 },
   { top: 4 },

@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { AVAILABLE_BEATS, BPM_MIN, BPM_MAX, type Measure } from "../types";
+import { AVAILABLE_BEATS, BPM_MIN, BPM_MAX, type TimeSignature } from "../types";
 
 describe("types", () => {
-  describe("Measure interface", () => {
-    it("accepts valid measure object", () => {
-      const measure: Measure = { top: 4 };
-      expect(measure.top).toBe(4);
+  describe("TimeSignature interface", () => {
+    it("accepts valid time signature object", () => {
+      const ts: TimeSignature = { top: 4 };
+      expect(ts.top).toBe(4);
     });
   });
 
@@ -19,7 +19,7 @@ describe("types", () => {
       expect(beatValues).toEqual([2, 3, 4, 6, 8]);
     });
 
-    it("contains valid Measure objects", () => {
+    it("contains valid TimeSignature objects", () => {
       AVAILABLE_BEATS.forEach((beat) => {
         expect(beat).toHaveProperty("top");
         expect(typeof beat.top).toBe("number");

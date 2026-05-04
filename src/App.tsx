@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import "./App.css";
 import { BPMSlider, BeatIndicator, ControlButtons, KeyboardHints } from "./components";
 import { useAudioClick, useTapTempo, useMetronome, useKeyboardControls } from "./hooks";
-import { AVAILABLE_BEATS, BPM_MIN, BPM_MAX, type Measure } from "./types";
+import { AVAILABLE_BEATS, BPM_MIN, BPM_MAX, type TimeSignature } from "./types";
 
 function App() {
   const [bpm, setBpm] = useState<number>(100);
@@ -11,7 +11,7 @@ function App() {
   const [currentBeat, setCurrentBeat] = useState<number>(-1);
   const [flash, setFlash] = useState(false);
   const [visualAid, setVisualAid] = useState(false);
-  const [measure, setMeasure] = useState<Measure>({ top: 4 });
+  const [measure, setMeasure] = useState<TimeSignature>({ top: 4 });
 
   const { playClick } = useAudioClick();
   const { handleTap } = useTapTempo(setBpm);
@@ -41,8 +41,8 @@ function App() {
       const idx = AVAILABLE_BEATS.findIndex((m) => m.top === prev.top);
       return AVAILABLE_BEATS[(idx + 1) % AVAILABLE_BEATS.length];
     });
+    // Reset visual beat; useMetronome will immediately fire onBeatChange(0) if playing
     setCurrentBeat(-1);
-    setIsPlaying(false);
   }, []);
 
   const handlePlayToggle = useCallback(() => {
@@ -52,18 +52,22 @@ function App() {
 
   const handleTapTempo = useCallback(() => {
     handleTap();
-    setCurrentBeat(-1);
-    setIsPlaying(false);
+    // Let the metronome keep running; it will restart from beat 0 when bpm updates
   }, [handleTap]);
+
+  const handleMuteToggle = useCallback(() => setIsMuted((prev) => !prev), []);
+  const handleVisualAidToggle = useCallback(() => setVisualAid((prev) => !prev), []);
+  const handleBpmIncrease = useCallback(() => setBpm((prev) => Math.min(prev + 1, BPM_MAX)), []);
+  const handleBpmDecrease = useCallback(() => setBpm((prev) => Math.max(prev - 1, BPM_MIN)), []);
 
   useKeyboardControls({
     onPlayToggle: handlePlayToggle,
-    onMuteToggle: () => setIsMuted((prev) => !prev),
-    onVisualAidToggle: () => setVisualAid((prev) => !prev),
+    onMuteToggle: handleMuteToggle,
+    onVisualAidToggle: handleVisualAidToggle,
     onTap: handleTapTempo,
     onBeatsToggle: toggleBeats,
-    onBpmIncrease: () => setBpm((prev) => Math.min(prev + 1, BPM_MAX)),
-    onBpmDecrease: () => setBpm((prev) => Math.max(prev - 1, BPM_MIN)),
+    onBpmIncrease: handleBpmIncrease,
+    onBpmDecrease: handleBpmDecrease,
   });
 
   return (
@@ -79,8 +83,8 @@ function App() {
           visualAid={visualAid}
           measureTop={measure.top}
           onPlayToggle={handlePlayToggle}
-          onMuteToggle={() => setIsMuted((m) => !m)}
-          onVisualAidToggle={() => setVisualAid((v) => !v)}
+          onMuteToggle={handleMuteToggle}
+          onVisualAidToggle={handleVisualAidToggle}
           onBeatsToggle={toggleBeats}
           onTap={handleTapTempo}
         />

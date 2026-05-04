@@ -11,7 +11,7 @@ export const KeyboardHints = () => {
       <br />
       <b>B</b> change beats
       <br />
-      <b>Enter</b> tap tempo
+      <b>Enter / T</b> tap tempo
     </div>
   );
 };

@@ -1,10 +1,10 @@
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 
 export const useTapTempo = (setBpm: (bpm: number | ((prev: number) => number)) => void) => {
   const tapTimesRef = useRef<number[]>([]);
   const lastTapRef = useRef<number>(0);
 
-  const handleTap = () => {
+  const handleTap = useCallback(() => {
     const now = performance.now();
     const MIN_INTERVAL = 200;
     const MAX_INTERVAL = 1500;
@@ -61,7 +61,7 @@ export const useTapTempo = (setBpm: (bpm: number | ((prev: number) => number)) =
       const clamped = Math.min(300, Math.max(40, Math.round(bpmCalc)));
       setBpm((prev) => Math.round(prev * 0.3 + clamped * 0.7));
     }
-  };
+  }, [setBpm]);
 
   return { handleTap };
 };
